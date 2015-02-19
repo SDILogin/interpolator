@@ -14,6 +14,9 @@ class WindowManager(tkinter.Tk):
         self.btn_generate.pack(side = tkinter.BOTTOM)
         self.btn_generate.bind('<Button-1>', self.generate_new_sequence)
 
+    # рисование графика
+    # зеленый -- возрастание 
+    # красный -- уменьшение
     def draw_plot(self, table):
         interpolated_table = self.interpolation(self.interpolation2(self.interpolation2(table)))
         for i in range(0, len(interpolated_table) -2, 2):
@@ -26,6 +29,7 @@ class WindowManager(tkinter.Tk):
                 fill=color)
         self.canvas.create_line(*table, fill='black')
 
+    # добавление промежуточных значений
     def interpolation(self, table, count = 3):
         res = table[:]
         for _ in range(count):
@@ -40,6 +44,8 @@ class WindowManager(tkinter.Tk):
             res = nres[:]
         return res
 
+    # каждое значение заменяется средним из 3-х
+    # a[i] = (a[i-1] + a[i] + a[i+2])/3
     def interpolation2(self, table):
         res = table[:]
         for i in range(0, len(res) -4, 2):
@@ -47,6 +53,8 @@ class WindowManager(tkinter.Tk):
             res[i + 3] = res[i+1]/3 + res[i+3]/3 + res[i+5] /3
         return res 
 
+    # генерирует новую последовательность (на данный момент случайна),
+    # основанную на функции sin
     def generate_new_sequence(self, *arg, **kword):
         self.canvas.delete(tkinter.ALL)
         x = 0
